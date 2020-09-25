@@ -163,6 +163,7 @@ Alexa Orrico - [Github](https://github.com/alexaorrico) / [Twitter](https://twit
 Jennifer Huang - [Github](https://github.com/jhuang10123) / [Twitter](https://twitter.com/earthtojhuang)
 Jairo Sandoval - [Github](https://github.com/sandovbarr) / [Twitter](https://twitter.com/elhumanimal)  
 Diego Romero - [Github](https://github.com/loopingdiego) / [Twitter](https://twitter.com/LoopingDiego)
+Eduard Amador - [Github](https://github.com/SneyderHOL) / [Twitter](https://twitter.com/sneydamaval)
 
 ## License
 Public Domain. No copy write protection. 
