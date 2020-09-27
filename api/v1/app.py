@@ -18,7 +18,7 @@ app.register_blueprint(app_views)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 PORT = getenv('HBNB_API_PORT') if getenv('HBNB_API_PORT') else 5000
 HOST = getenv('HBNB_API_HOST') if getenv('HBNB_API_HOST') else "0.0.0.0"
-cors = CORS(app, resources={r"/*": {"origins": "0.0.0.0"}})
+cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
 
 @app.teardown_appcontext

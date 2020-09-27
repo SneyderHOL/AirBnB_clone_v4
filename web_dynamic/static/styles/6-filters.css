@@ -64,6 +64,10 @@ button:hover {
     max-height: 300px;
 }
 
+.popover ul li input {
+    margin-right: 10px;
+}
+
 .popover::-webkit-scrollbar{
     width: 0px;
 }
