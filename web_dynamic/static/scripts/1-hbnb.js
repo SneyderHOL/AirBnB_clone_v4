@@ -1,3 +1,4 @@
+const $ = window.$;
 $(document).ready(function () {
   var objs = {};
   $('input').change(function () {
