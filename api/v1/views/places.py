@@ -113,3 +113,70 @@ def get_places_by_id(place_id):
             storage.save()
             return jsonify(place_obj.to_dict()), 200
     abort(404)
+
+@app_views.route('/places_search', methods=['POST'],
+                 strict_slashes=False)
+# @swag_from('swagger_spec/search_places.yml')
+def search_places():
+    """Searches Places to data"""
+    data = request.get_json()
+    if type(data) is not dict:
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
+    if len(data) == 0:
+        list_places = [place.to_dict()
+                       for place in storage.all(Place).values()]
+        return jsonify(list_places)
+    len_states = len(data['states']) if 'states' in data else 0
+    len_cities = len(data['cities']) if 'cities' in data else 0
+    len_amenities = len(data['amenities']) if 'amenities' in data else 0
+    if len_states == 0 and len_cities == 0 and len_amenities == 0:
+        list_places = [place.to_dict()
+                       for place in storage.all(Place).values()]
+        return jsonify(list_places)
+    list_states = []
+    list_cities = []
+    if len_states > 0:
+        for state_id in data['states']:
+            list_states.append(get_object(State, state_id))
+        for state in list_states:
+            for city in state.cities:
+                list_cities.append(city)
+    if len_cities > 0:
+        for city_id in data['cities']:
+            list_cities.append(get_object(City, city_id))
+    list_cities = list(set(list_cities))
+    list_places = []
+    for city in list_cities:
+        for place in city.places:
+            list_places.append(place)
+    if len_states == 0 and len_cities == 0:
+        list_places = storage.all(Place).values()
+    if (len_states > 0 or len_cities > 0) and len(list_places) == 0:
+        return jsonify({})
+    if len_amenities == 0:
+        result = [place.to_dict() for place in list_places]
+        return jsonify(result)
+    places_in_search = []
+
+    for place in list_places:
+        checked = True
+        if environ.get('HBNB_TYPE_STORAGE') == 'db':
+            place_amenities = [amenity.id for amenity in place.amenities]
+        else:
+            place_amenities = place.amenity_ids
+        for amenity_id in data['amenities']:
+            if amenity_id not in place_amenities:
+                checked = False
+                break
+        if checked is True:
+            del(place.amenities)
+            places_in_search.append(get_object(Place, place.id))
+    result = [place.to_dict() for place in places_in_search]
+    return jsonify(result)
+
+
+def get_object(cls, obj_id):
+    obj = storage.get(cls, obj_id)
+    if obj is None:
+        abort(404)
+    return obj
