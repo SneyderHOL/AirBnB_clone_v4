@@ -19,48 +19,47 @@ $(document).ready(function () {
     }
   });
 
-  $.post('http://0.0.0.0:5001/api/v1/places_search', function (data, textStatus, typeResponse) {
-    console.log(typeResponse);
-    if (typeResponse !== 'json') {
-      console.log('Wrong type of result');
-      return;
-    }
-    const resultSize = data.length;
-    console.log(resultSize);
-    if (resultSize === 0) {
-      console.log('No data found');
-      return;
-    }
-    // for (let i = 0; i < 1; i++) {
-    for (let i = 0; i < resultSize; i++) {
-      if (data[i].__class__ !== 'Place') {
-        console.log('No place');
-        continue;
+  $.ajax({
+    url: 'http://0.0.0.0:5001/api/v1/places_search',
+    type: 'POST',
+    success: function (data) {
+      const resultSize = data.length;
+      if (resultSize === 0) {
+        console.log('No data found');
+        return;
       }
-      $('<article></article>').appendTo('.places');
-      $('<div class="title_box"></div>').appendTo('.places article');
-      $('<h2>' + data[i].name + '</h2>').appendTo('.places article .title_box');
-      $('<div class="price_by_night">' + data[i].price_by_night + '</div>').appendTo('.places article .title_box');
-      $('<div class="information"></div>').appendTo('.places article');
-      const maxGuest = data[i].max_guest;
-      let pluralString = '';
-      if (maxGuest > 1) {
-        pluralString = 's';
+      for (let i = 0; i < resultSize; i++) {
+        let guestPluralString = '';
+        const maxGuest = data[i].max_guest;
+        if (maxGuest > 1) {
+          guestPluralString = 's';
+        }
+        let roomPluralString = '';
+        const numberRooms = data[i].number_rooms;
+        if (numberRooms > 1) {
+          roomPluralString = 's';
+        }
+        let bathroomPluralString = '';
+        const numberBathrooms = data[i].number_bathrooms;
+        if (numberBathrooms > 1) {
+          bathroomPluralString = 's';
+        }
+        $('.places').append(
+          '<article>\
+             <div class="title_box">\
+               <h2>' + data[i].name + '</h2>\
+               <div class="price_by_night">' + '$' + data[i].price_by_night + '</div>\
+             </div>\
+           <div class="information">\
+             <div class="max_guest">' + maxGuest + ' Guest' + guestPluralString + '</div>\
+             <div class="number_rooms">' + numberRooms + ' Bedroom' + roomPluralString + '</div>\
+             <div class="number_bathrooms">' + numberBathrooms + ' Bathroom' + bathroomPluralString + '</div>\
+           </div>\
+           <div class="description">' + data[i].description + '</div>\
+           </article>');
       }
-      $('<div class="max_guest">' + maxGuest + ' Guest' + pluralString + '</div>').appendTo('.places article .information');
-      pluralString = '';
-      const numberRooms = data[i].number_rooms;
-      if (numberRooms > 1) {
-        pluralString = 's';
-      }
-      $('<div class="number_rooms">' + numberRooms + ' Bedroom' + pluralString + '</div>').appendTo('.places article .information');
-      pluralString = '';
-      const numberBathrooms = data[i].number_bathrooms;
-      if (numberBathrooms > 1) {
-        pluralString = 's';
-      }
-      $('<div class="number_bathrooms">' + numberBathrooms + ' Bathroom' + pluralString + '</div>').appendTo('.places article .information');
-      $('<div class="description">' + data[i].description + '</div>').appendTo('.places article');
-    }
+    },
+    data: JSON.stringify({}),
+    headers: { 'Content-Type': 'application/json' }
   });
 });
