@@ -45,18 +45,18 @@ $(document).ready(function () {
           bathroomPluralString = 's';
         }
         $('.places').append(
-          '<article>\
-             <div class="title_box">\
-               <h2>' + data[i].name + '</h2>\
-               <div class="price_by_night">' + '$' + data[i].price_by_night + '</div>\
-             </div>\
-           <div class="information">\
-             <div class="max_guest">' + maxGuest + ' Guest' + guestPluralString + '</div>\
-             <div class="number_rooms">' + numberRooms + ' Bedroom' + roomPluralString + '</div>\
-             <div class="number_bathrooms">' + numberBathrooms + ' Bathroom' + bathroomPluralString + '</div>\
-           </div>\
-           <div class="description">' + data[i].description + '</div>\
-           </article>');
+          '<article>' +
+            '<div class="title_box">' +
+              '<h2>' + data[i].name + '</h2>' +
+              '<div class="price_by_night">' + '$' + data[i].price_by_night + '</div>' +
+            '</div>' +
+          '<div class="information">' +
+            '<div class="max_guest">' + maxGuest + ' Guest' + guestPluralString + '</div>' +
+            '<div class="number_rooms">' + numberRooms + ' Bedroom' + roomPluralString + '</div>' +
+            '<div class="number_bathrooms">' + numberBathrooms + ' Bathroom' + bathroomPluralString + '</div>' +
+          '</div>' +
+          '<div class="description">' + data[i].description + '</div>' +
+          '</article>');
       }
     },
     data: JSON.stringify({}),
